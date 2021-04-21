@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 
-const ListItem = ({item, deleteItem, editItem, listLetter}) => {
+const ListItem = ({item, deleteItem, editItem, listLetter, showColors}) => {
 
     const [isEditing, setIsEditing] = useState(false)
     const [editedItem, setEditedItem] = useState({
@@ -25,13 +25,11 @@ const ListItem = ({item, deleteItem, editItem, listLetter}) => {
 
 
     const backgroundColor = (num) => {
-        if(num === 0){
-            return "#6C757D"
-        } else if (num > 0) {
-            return "#1A8596"
-        } else {
-            return "#DC3545"
-        }
+        if(!showColors) return "#6C757D";
+        else if(num == 0) return "#6C757D";
+        else if (num > 0) return "#1A8596";
+        else return "#DC3545"
+
     }
 
 
@@ -57,16 +55,17 @@ const ListItem = ({item, deleteItem, editItem, listLetter}) => {
                 }}
             >
                 <input name={"desc"} value={editedItem.desc} onChange={handleChange}/>
-                <input name={"num"} value={editedItem.num} onChange={handleChange}/>
+                <input type="number" name={"num"} value={editedItem.num} onChange={handleChange}/>
                 <button onClick={onSubmit}>done</button>
             </div>
             <p
                 style={{
-                    marginLeft:'10px'
+                    marginLeft:'10px', 
+                    cursor: 'pointer'
                 }}
                 onClick={()=>setIsEditing(!isEditing)}
             >📝</p>
-            <p style={{ marginLeft:'10px'}} onClick={()=>deleteItem(item, listLetter)}>❌</p>
+            <p style={{ marginLeft:'10px', cursor: 'pointer'}} onClick={()=>deleteItem(item, listLetter)}>❌</p>
         </div>
         ) : (
             <div
@@ -91,11 +90,12 @@ const ListItem = ({item, deleteItem, editItem, listLetter}) => {
                 </div>
                 <p
                     style={{
-                        marginLeft:'10px'
+                        marginLeft:'10px', 
+                        cursor: 'pointer'
                     }}
                     onClick={()=>setIsEditing(!isEditing)}
                 >📝</p>
-                <p style={{ marginLeft:'10px'}} onClick={()=>deleteItem(item, listLetter)}>❌</p>
+                <p style={{ marginLeft:'10px', cursor: 'pointer'}} onClick={()=>deleteItem(item, listLetter)}>❌</p>
             </div>
         )
     )

@@ -2,7 +2,7 @@ import React from 'react'
 import ListItem from './ListItem'
 import ListForm from './ListForm'
 
-const List = ({ list, setList, showTotals, deleteItem, editItem, listLetter }) => {
+const List = ({ list, setList, showTotals, deleteItem, editItem, listLetter, showColors }) => {
   
     return (
       <div
@@ -19,7 +19,7 @@ const List = ({ list, setList, showTotals, deleteItem, editItem, listLetter }) =
             Total: {list.reduce((curr, total) => curr + Number(total.num), 0)}
           </p>
           {list.map((item) => (
-            <ListItem item={item} deleteItem={deleteItem} listLetter={listLetter} editItem={editItem}/>
+            <ListItem item={item} deleteItem={deleteItem} listLetter={listLetter} editItem={editItem} showColors={showColors}/>
           ))}
         </div>
       </div>

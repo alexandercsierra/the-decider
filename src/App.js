@@ -1,16 +1,29 @@
 import "./styles.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import List from './components/List';
 import ListForm from './components/ListForm'
 
 export default function App() {
   const [names, setNames] = useState({
-    listA: "",
-    listB: ""
+    listA: localStorage.getItem("listAName") || "",
+    listB: localStorage.getItem("listBName") || ""
   });
-  const [listA, setListA] = useState([]);
-  const [listB, setListB] = useState([]);
+  const [listA, setListA] = useState(JSON.parse(localStorage.getItem("listA")) || []);
+  const [listB, setListB] = useState(JSON.parse(localStorage.getItem("listB")) || []);
   const [showTotals, setShowTotals] = useState(false);
+  const [showColors, setShowColors] = useState(false);
+
+  useEffect(()=>{
+    localStorage.setItem("listA", JSON.stringify(listA))
+    localStorage.setItem("listB", JSON.stringify(listB))
+  },[listA, listB])
+
+  useEffect(()=>{
+    localStorage.setItem("listAName", names.listA)
+    localStorage.setItem("listBName", names.listB)
+  },[names.listA, names.listB])
+
+
 
   const deleteItem = (item, listLetter) => {
     const list = listLetter === "A" ? listA : listB;
@@ -58,6 +71,44 @@ export default function App() {
       >
         {showTotals ? "Hide Winner" : "Get Winner"}
       </button>
+      <button
+        onClick={() => setShowColors(!showColors)}
+        style={{
+          background: "#138496",
+          // width: "60px",
+          color: "white",
+          padding: "15px",
+          border: "none",
+          borderRadius: "4px",
+          marginLeft: "5px",
+          fontWeight: "700"
+        }}
+      >
+        {showColors ? "Hide Colors" : "Show Colors"}
+      </button>
+      <button
+        onClick={() => {
+          localStorage.clear()
+          setListA([])
+          setListB([])
+          setNames({
+            listA: "",
+            listB: ""
+          })
+        }}
+        style={{
+          background: "#138496",
+          // width: "60px",
+          color: "white",
+          padding: "15px",
+          border: "none",
+          borderRadius: "4px",
+          marginLeft: "5px",
+          fontWeight: "700"
+        }}
+      >
+        Reset
+      </button>
       <p
         style={{
           visibility: showTotals ? "visible" : "hidden",
@@ -94,7 +145,10 @@ export default function App() {
             showTotals={showTotals} 
             deleteItem={deleteItem} 
             editItem={editItem}
-            listLetter={"A"}/>
+            listLetter={"A"}
+            showColors={showColors}
+          />
+            
         </div>
         <div
           style={{
@@ -113,6 +167,7 @@ export default function App() {
             deleteItem={deleteItem} 
             editItem={editItem}
             listLetter={"B"}
+            showColors={showColors}
           />
         </div>
       </div>

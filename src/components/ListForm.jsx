@@ -18,11 +18,12 @@ const ListForm = ({ list, setList }) => {
         style={{
           display: "flex",
           justifyContent: "center",
-          alignItems: "flex-end"
+          alignItems: "flex-end",
+          flexWrap:'wrap'
         }}
       >
         <div style={{ display: "flex", flexDirection: "column", width: "180px" }}>
-          <label>Pro/Con</label>
+          <label style={{fontWeight:'600'}}>Pro/Con</label>
           <input
             name="desc"
             value={value.desc}
@@ -36,7 +37,7 @@ const ListForm = ({ list, setList }) => {
           />
         </div>
         <div style={{ display: "flex", flexDirection: "column", width: "60px" }}>
-          <label>Weight</label>
+          <label style={{fontWeight:'600'}}>Weight</label>
           <input
             type="number"
             name="num"
