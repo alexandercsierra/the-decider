@@ -1,5 +1,7 @@
 import "./styles.css";
 import React, { useState } from "react";
+import List from './components/List';
+import ListForm from './components/ListForm'
 
 export default function App() {
   const [names, setNames] = useState({
@@ -9,6 +11,18 @@ export default function App() {
   const [listA, setListA] = useState([]);
   const [listB, setListB] = useState([]);
   const [showTotals, setShowTotals] = useState(false);
+
+  const deleteItem = (item, listLetter) => {
+    const list = listLetter === "A" ? listA : listB;
+    const newList = list.filter(listItem => listItem.id !== item.id)
+    listLetter === "A" ? setListA(newList) : setListB(newList)
+  }
+
+  const editItem = (item, listLetter) => {
+    const list = listLetter === "A" ? listA : listB;
+    const newList = list.filter(listItem => listItem.id !== item.id)
+    listLetter === "A" ? setListA([...newList, item]) : setListB([...newList, item])
+  }
 
   const getTotal = (list) => {
     return list.reduce((curr, total) => curr + Number(total.num), 0);
@@ -27,7 +41,7 @@ export default function App() {
 
   return names.listA && names.listB ? (
     <div className="App">
-      <h1>The Decider</h1>
+      <h1>The Decider 👩‍⚖️</h1>
       <h2>Enter pros/cons with numeric weights</h2>
       <button
         onClick={() => setShowTotals(!showTotals)}
@@ -74,7 +88,13 @@ export default function App() {
           }}
         >
           <h4>{names.listA}</h4>
-          <List list={listA} setList={setListA} showTotals={showTotals} />
+          <List 
+            list={listA} 
+            setList={setListA} 
+            showTotals={showTotals} 
+            deleteItem={deleteItem} 
+            editItem={editItem}
+            listLetter={"A"}/>
         </div>
         <div
           style={{
@@ -86,7 +106,14 @@ export default function App() {
           }}
         >
           <h4>{names.listB}</h4>
-          <List list={listB} setList={setListB} showTotals={showTotals} />
+          <List 
+            list={listB} 
+            setList={setListB} 
+            showTotals={showTotals} 
+            deleteItem={deleteItem} 
+            editItem={editItem}
+            listLetter={"B"}
+          />
         </div>
       </div>
     </div>
@@ -165,98 +192,6 @@ const SetLists = ({ setNames }) => {
   );
 };
 
-const List = ({ list, setList, showTotals }) => {
-  return (
-    <div
-      style={{
-        width: "90%",
-        padding: "4%",
-        background: "#f5f5f5",
-        borderRadius: "15px"
-      }}
-    >
-      <ListForm list={list} setList={setList} />
-      <div>
-        <p style={{ visibility: showTotals ? "visible" : "hidden" }}>
-          Total: {list.reduce((curr, total) => curr + Number(total.num), 0)}
-        </p>
-        {list.map((item) => (
-          <div>
-            <p>{item.desc}</p>
-            <p>{item.num}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
 
-const ListForm = ({ list, setList }) => {
-  const [value, setValue] = useState({ desc: "", num: 0 });
 
-  const handleChange = (e) => {
-    setValue({
-      ...value,
-      [e.target.name]: e.target.value
-    });
-  };
-  const handleClick = () => {
-    console.log({ value });
-    setList([...list, value]);
-  };
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "flex-end"
-      }}
-    >
-      <div style={{ display: "flex", flexDirection: "column", width: "180px" }}>
-        <label>Pro/Con</label>
-        <input
-          name="desc"
-          value={value.desc}
-          onChange={handleChange}
-          style={{
-            padding: "5px",
-            border: "none",
-            borderRadius: "4px",
-            background: "#e2e2e2"
-          }}
-        />
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", width: "60px" }}>
-        <label>Weight</label>
-        <input
-          type="number"
-          name="num"
-          value={value.num}
-          onChange={handleChange}
-          style={{
-            padding: "5px",
-            border: "none",
-            borderRadius: "4px",
-            background: "#e2e2e2",
-            marginLeft: "4px"
-          }}
-        />
-      </div>
-      <button
-        onClick={handleClick}
-        style={{
-          background: "#28A745",
-          width: "60px",
-          color: "white",
-          padding: "6px 10px",
-          border: "none",
-          borderRadius: "4px",
-          marginLeft: "5px",
-          fontWeight: "700"
-        }}
-      >
-        Add
-      </button>
-    </div>
-  );
-};
+
